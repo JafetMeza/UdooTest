@@ -10,11 +10,12 @@
 
 #include "gpiolib.h"
 #include "serialCommunication.h"
+#include "adclib.h"
 using namespace std;
-//constexpr auto INPUT = 0;;
-//constexpr auto OUTPUT = 1;;
-//constexpr auto HIGHT = 1;;
-//constexpr auto LOW = 0;;
+constexpr auto INPUT = 0;;
+constexpr auto OUTPUT = 1;;
+constexpr auto HIGHT = 1;;
+constexpr auto LOW = 0;;
 
 //CODIGO PRUEBA PARA UTILIZAR LAS ENTRADAS Y SALIDAS DIGITALES DEL GPIO
 //int main()
@@ -77,72 +78,45 @@ using namespace std;
 
 //CODIGO PRUEBA PARA COMUNICACION SERIAL
 //int main(void) {
-//    //char* portname = "/dev/ttyS0";
-//    char* portname = "/dev/ttyMCC";
-//
-//    int fd = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
-//    if (fd < 0)
+//    //char* portname = "/dev/ttyS0";             //Nombre del puerto serial para udoo quad
+//    char* portname = "/dev/ttyMCC";              //Nombre del puerto serial para udoo neo
+//    int fd = 0;
+//    
+//    fd = serialCommunication_init(portname);
+//    if (fd > 0)
 //    {
-//        cout <<"error %d opening " << errno <<portname << strerror(errno);
-//        return 0;
+//        set_interface_attribs(fd, B115200, 0);		// set speed to 115,200 bps, 8n1 (no parity)
+//        set_blocking(fd, 0);						// set no blocking
 //    }
-//
-//    set_interface_attribs(fd, B115200, 0);		// set speed to 115,200 bps, 8n1 (no parity)
-//    set_blocking(fd, 0);						// set no blocking
-//
+//    
 //    char buf[7];
-//    int n;
+//    int value;
 //    while (true)
 //    {
-//        n = read(fd, buf, sizeof buf); 	// read up to 7 characters if ready to read
-//        if (n > 0)
+//        value = read_serialCommunication(fd, buf);
+//        if (value > -1)
 //        {
-//            cout << "Read: " << atoi(buf) << endl;
+//            cout << "Read: " << value << endl;
 //        }
 //        else
 //        {
-//            cout << "Error reading " << buf << endl;
+//            cout << "Error reading " << endl;
 //        }
 //    }
 //    close(fd);
 //}
 
-//CODIGO PRUEBA ADC
-#define SHELLSCRIPT "\
-#/bin/bash \n\
-raw = $(</sys/bus/iio/devices/iio\\:device0/in_voltage0_raw) \n\
-echo '$raw' \n\
-"
-
+//CODIGO PARA ADC
 int main(void)
 {
-	int n1 = 0;
-	char raw[20];
-	int fd1 = open("/sys/bus/iio/devices/iio:device0/in_voltage0_raw", O_RDONLY);
-	if (fd1 < 0)
-	{
-		cout << "error abriendo el archivo " << endl;
-		return 0;
-	}
-
+	int value = 0;
 	while (true)
 	{
-		n1 = read(fd1, raw, sizeof raw);
-		if (n1 > 0 )
+		value = adc_read(0);
+		if (value > -1)
 		{
-			cout << "Valor: " << atoi(raw) << endl;
+			cout << "ADC Value: " << value << endl;
 		}
-		else
-		{
-			cout << "Error reading " << atoi(raw) << endl;
-		}
-		lseek(fd1, 0, SEEK_SET);
 		usleep(100000);
 	}
-	close(fd1);
-	/*puts("Will execute sh with the following script :");
-	puts(SHELLSCRIPT);
-	puts("Starting now:");
-	system(SHELLSCRIPT);
-	return 0;*/
 }
