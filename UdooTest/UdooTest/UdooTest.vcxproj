@@ -75,11 +75,13 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="adclib.cpp" />
     <ClCompile Include="gpiolib.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="serialCommunication.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="adclib.h" />
     <ClInclude Include="gpiolib.h" />
     <ClInclude Include="serialCommunication.h" />
   </ItemGroup>

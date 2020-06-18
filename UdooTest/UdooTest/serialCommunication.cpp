@@ -10,6 +10,18 @@
 
 #include "serialCommunication.h"
 
+int serialCommunication_init(char *portname)
+{
+    int fd = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
+    if (fd < 0)
+    {
+        std::cout << "error %d opening " << errno << portname << strerror(errno);
+        return 0;
+    }
+
+    return fd;
+}
+
 int set_interface_attribs(int fd, int speed, int parity)
 {
     struct termios tty;
@@ -65,4 +77,15 @@ void set_blocking(int fd, int should_block)
 
     if (tcsetattr(fd, TCSANOW, &tty) != 0)
         printf("error %d setting term attributes", errno);
+}
+
+int read_serialCommunication(int fd, char* buff)
+{
+    int n = read(fd, buff, sizeof buff);
+    if (n > 0)
+    {
+        return atoi(buff);
+    }
+
+    return -1;
 }
