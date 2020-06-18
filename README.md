@@ -10,12 +10,12 @@ Creadas librerias para la utilización de las tarjetas udoo.
 +-------------------------------------------------------------------------------+  
 
 
-+-------------------------------------------SERIALCOMMUNICATION--------------------------------------------------------------------+
-|  serialCommunication_init(char* portname);                     ---Inicializa la comunicacion Serial, retorna -1 si no se logró   |
-|                                                                   establecer                                                     |
-|  set_interface_attribs(int fd, int speed, int parity);         ---Establece la velocidad de la conexion de la comunicaion Serial |
-|  set_blocking(int fd, int should_block);                       ---Establece un bloqueo a la comunciacion                         |
-|  read_serialCommunication(int fd, char* buff);                 ---Leer puerto serial, retorna -1 si no lo leyó                   |
++--------------------------------------SERIALCOMMUNICATION--------------------------------------------------------------------+
+|  serialCommunication_init(char* portname);                ---Inicializa la comunicacion Serial, retorna -1 si no se logró   |
+|                                                              establecer                                                     |
+|  set_interface_attribs(int fd, int speed, int parity);    ---Establece la velocidad de la conexion de la comunicaion Serial |
+|  set_blocking(int fd, int should_block);                  ---Establece un bloqueo a la comunciacion                         |
+|  read_serialCommunication(int fd, char* buff);            ---Leer puerto serial, retorna -1 si no lo leyó                   |
 +----------------------------------------------------------------------------------------------------------------------------------+
 
 
