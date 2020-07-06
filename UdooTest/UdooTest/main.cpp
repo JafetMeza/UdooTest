@@ -20,28 +20,8 @@ constexpr auto LOW = 0;;
 //CODIGO PRUEBA PARA UTILIZAR LAS ENTRADAS Y SALIDAS DIGITALES DEL GPIO
 //int main()
 //{
-//    /*char buff[3];
-//    char* echo = "out";
-//    int pin49 = open("/gpio/pin49/direction", O_WRONLY);
-//    write(pin49, echo, sizeof(echo));
-//    int pin27 = open("/gpio/pin27/direction", O_WRONLY);
-//    write(pin27, "in", 2);
-//
-//    pin49 = open("/gpio/pin49/value", O_WRONLY);
-//    pin27 = open("/gpio/pin27/value", O_WRONLY);
-//    while (true)
-//    {
-//        read(pin27, buff, sizeof(buff));
-//        write(pin49, "1", 1);
-//        usleep(100000);
-//        write(pin49, "0", 1);
-//        usleep(100000);
-//    }
-//    close(pin49);
-//    close(pin27);*/
-//
-//    int pin_27 = 88; //Pin 53
-//    int gpio_pin = 104; //Pin 49
+//    int pin_27 = 25; //Pin 53
+//    int gpio_pin = 22; //Pin 49
 //
 //    gpio_export(pin_27);
 //    gpio_export(gpio_pin);
@@ -76,7 +56,7 @@ constexpr auto LOW = 0;;
 //}
 
 
-//CODIGO PRUEBA PARA COMUNICACION SERIAL
+//CODIGO PRUEBA PARA COMUNICACION SERIAL LEER
 //int main(void) {
 //    //char* portname = "/dev/ttyS0";             //Nombre del puerto serial para udoo quad
 //    char* portname = "/dev/ttyMCC";              //Nombre del puerto serial para udoo neo
@@ -90,13 +70,13 @@ constexpr auto LOW = 0;;
 //    }
 //    
 //    char buf[7];
-//    int value;
+//    char result[64];
 //    while (true)
 //    {
-//        value = read_serialCommunication(fd, buf);
-//        if (value > -1)
+//        result = read_serialCommunication(fd, buf);
+//        if (result != '\0')
 //        {
-//            cout << "Read: " << value << endl;
+//            cout << "Read: " << atoi(result) << endl;
 //        }
 //        else
 //        {
@@ -106,17 +86,72 @@ constexpr auto LOW = 0;;
 //    close(fd);
 //}
 
-//CODIGO PARA ADC
-int main(void)
-{
-	int value = 0;
-	while (true)
-	{
-		value = adc_read(0);
-		if (value > -1)
-		{
-			cout << "ADC Value: " << value << endl;
-		}
-		usleep(100000);
-	}
+//CODIGO PRUEBA PARA COMUNICACION SERIAL LEER Y ESCRIBIR
+int main(void) {
+    //char* portname = "/dev/ttyS0";             //Nombre del puerto serial para udoo quad
+    char* portname = "/dev/ttyMCC";              //Nombre del puerto serial para udoo neo
+    int fd = 0;
+
+    fd = serialCommunication_init(portname);
+    if (fd > 0)
+    {
+        set_interface_attribs(fd, B115200, 0);		// set speed to 115,200 bps, 8n1 (no parity)
+        set_blocking(fd, 0);						// set no blocking
+    }
+
+    char buf[7];
+    char buff[7];
+    int valueW;
+    char *valueR;
+    while (true)
+    {
+        cout << "Ingrese un 1 para prender un led o un 0 para apagarlo: ";
+        cin >> buf;
+        valueW = write_serialCommunication(fd, buf);
+        if (valueW > 0)
+        {
+            valueR = read_serialCommunication(fd, buff);
+            if (valueR > 0)
+            {
+                cout << "Lectura Recibida: " << valueR << endl;
+                usleep(1000000);
+            }
+            else
+            {
+                cout << "Error de lectura" << endl;
+            }
+        }
+    }
+    close(fd);
 }
+
+//CODIGO PARA ADC
+//int main(void)
+//{
+//	int value = 0;
+//	while (true)
+//	{
+//		value = adc_read(0);
+//		if (value > -1)
+//		{
+//			cout << "ADC Value: " << value << endl;
+//		}
+//		usleep(100000);
+//	}
+//}
+
+//CODIGO PARA PWM
+//int main(void)
+//{
+//	int efd;
+//	char buf[50];
+//	int gpiofd, ret;
+//
+//	// Checar si esta exportado  
+//	int fd = open("/sys/class/pwm/pwmchip0/export", O_RDWR);
+//	if (fd < 0)
+//	{
+//		cout << "Error" << endl;
+//		return 0;
+//	}
+//}
