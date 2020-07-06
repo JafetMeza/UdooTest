@@ -79,13 +79,24 @@ void set_blocking(int fd, int should_block)
         printf("error %d setting term attributes", errno);
 }
 
-int read_serialCommunication(int fd, char* buff)
+char* read_serialCommunication(int fd, char* buff)
 {
     int n = read(fd, buff, sizeof buff);
     if (n > 0)
     {
-        return atoi(buff);
+        return buff;
     }
 
-    return -1;
+    return '\0';
 }
+
+int write_serialCommunication(int fd, char* buff)
+{
+    int n = write(fd, buff, sizeof buff);
+    if (n < 0)
+    {
+        return -1;
+    }
+    return 1;
+}
+
