@@ -100,3 +100,24 @@ int write_serialCommunication(int fd, char* buff)
     return 1;
 }
 
+int write_int_serialCommunication(int fd, int number)
+{
+    int* numbers;
+
+    char* aux;
+
+    itoa(number, aux, 10);
+
+    for (int i = 0; aux[i] != '\0' ; i++)
+    {
+        numbers[i] = (int)aux[i];
+    }
+
+    int n = write(fd, numbers, sizeof numbers);
+    if (n < 0)
+    {
+        return -1;
+    }
+    return 1;
+}
+

@@ -10,6 +10,8 @@ void set_blocking(int fd, int should_block);
 char* read_serialCommunication(int fd, char* buff);
 //Escribir en puerto serial, retorna -1 si ocurrio un error
 int write_serialCommunication(int fd, char* buff);
+//Escribir en puerto serial (envia enteros), retorna -1 si ocurrio un error
+int write_int_serialCommunication(int fd, int number);
 #endif
 
 //CODIGO ARDUINO EN UDOO PARA COMUNICACION BIDIRECCIONAL
